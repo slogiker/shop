@@ -1,7 +1,9 @@
 const express = require('express');
 const Order = require('../models/order');
-const { isAuthenticated } = require('../middleware/auth');
+const { isAuthenticated } = require('../middleware/auth.js');
 const router = express.Router();
+
+console.log('isAuthenticated in shop.js:', isAuthenticated);
 
 router.post('/add-to-basket', isAuthenticated, (req, res) => {
     const { name, quantity, priceBTC, priceETH } = req.body;

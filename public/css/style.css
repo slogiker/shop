@@ -626,10 +626,3 @@ footer p {
     margin: 0;
     font-size: 14px;
 }
-
-@media (max-width: 600px) {
-    footer div {
-        flex-direction: column;
-        text-align: center;
-    }
-}

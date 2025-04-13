@@ -56,6 +56,7 @@ function setupNavigation() {
     fetch('/check-auth')
         .then(response => response.json())
         .then(data => {
+            console.log('Auth check result:', data); // Debug log
             const isForumPage = window.location.pathname.endsWith('forum.html');
             const loginBtn = document.getElementById('login-button');
             const registerBtn = document.getElementById('register-button');
@@ -88,14 +89,13 @@ function setupFooter() {
             <img src="/images/logo.png" alt="Logo" id="footerLogo">
             <p>© 2025 MyDrugs Online. All rights reserved.</p>
             <p class="footerLink" onclick="window.location.href='/forum.html';">Forum</p>
-            <p class="footerLink" onclick="window.location.href='/contact.html';">Contact Us</p>
         </div>
     `;
     document.body.appendChild(footer);
 }
 
 function logout() {
-    fetch('/logout', { method: 'POST' })
+    fetch('/auth/logout', { method: 'POST' })
         .then(response => {
             if (response.ok) {
                 alert('Odjavleni ste');
@@ -130,12 +130,6 @@ function togglePassword(section) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const contentWrapper = document.createElement('div');
-    contentWrapper.id = 'content';
-    while (document.body.firstChild) {
-        contentWrapper.appendChild(document.body.firstChild);
-    }
-    document.body.appendChild(contentWrapper);
     setupNavigation();
     setupFooter();
 });

@@ -5,4 +5,5 @@ function isAuthenticated(req, res, next) {
         res.redirect('/login.html');
     }
 }
+// Force cache reload
 module.exports = { isAuthenticated };
