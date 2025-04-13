@@ -1,6 +1,6 @@
 const express = require('express');
 const Order = require('../models/order');
-const { isAuthenticated } = require('../middleware/auth.js');
+const { isAuthenticated } = require('./auth.js');
 const router = express.Router();
 
 console.log('isAuthenticated in shop.js:', isAuthenticated);
