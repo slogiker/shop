@@ -9,11 +9,11 @@ function setupNavigation() {
 
     // Logo
     const logo = document.createElement('img');
-    logo.src = "/images/logo.png"; // Updated path to match public directory
+    logo.src = "/images/logo.png";
     logo.id = "logo";
     logo.alt = "Logo";
     logo.addEventListener('click', () => {
-        window.location.href = '/shop.html'; // Use location.href for navigation
+        window.location.href = '/shop.html';
     });
     navBar.appendChild(logo);
 
@@ -22,7 +22,7 @@ function setupNavigation() {
 
     // Login button
     const loginButton = document.createElement('button');
-    loginButton.id = 'login-button'; // Add ID for auth logic
+    loginButton.id = 'login-button';
     loginButton.textContent = 'Login';
     loginButton.className = 'custom-button';
     loginButton.style.marginRight = '10px';
@@ -33,9 +33,10 @@ function setupNavigation() {
 
     // Register button
     const registerButton = document.createElement('button');
-    registerButton.id = 'register-button'; // Add ID for auth logic
+    registerButton.id = 'register-button';
     registerButton.textContent = 'Register';
     registerButton.className = 'custom-button';
+    loginButton.style.marginRight = '10px';
     registerButton.addEventListener('click', () => {
         window.location.href = '/register.html';
     });
@@ -86,12 +87,12 @@ function setupNavigation() {
     });
     buttonContainer.appendChild(forumButton);
 
-    // Forum category placeholders (styled as buttons)
+    // Forum category placeholders
     const categories = ['General', 'Tech', 'Gaming', 'Off-Topic'];
     const categoryElements = [];
     categories.forEach(category => {
         const categorySpan = document.createElement('span');
-        categorySpan.id = `category-${category.toLowerCase()}`; // Add ID for reference
+        categorySpan.id = `category-${category.toLowerCase()}`;
         categorySpan.textContent = category;
         categorySpan.className = 'custom-button';
         categorySpan.style.marginRight = '10px';
@@ -107,8 +108,21 @@ function setupNavigation() {
     navBar.appendChild(buttonContainer);
     document.body.prepend(navBar);
 
+    // Wrap content in main-content
+    const mainContent = document.createElement('div');
+    mainContent.className = 'main-content';
+    while (document.body.childNodes.length > 1) {
+        const child = document.body.childNodes[1]; // Skip navBar
+        if (child.nodeName !== 'FOOTER') { // Avoid moving footer
+            mainContent.appendChild(child);
+        } else {
+            break;
+        }
+    }
+    document.body.appendChild(mainContent);
+
     // Authentication check
-    fetch('/check-auth')
+    fetch('/auth/check-auth')
         .then(response => response.json())
         .then(data => {
             console.log('Auth check result:', data);
@@ -131,6 +145,13 @@ function setupNavigation() {
                     logoutBtn.style.display = 'inline-block';
                     forumBtn.style.display = 'inline-block';
                     categoryElements.forEach(span => span.style.display = 'none');
+
+                    // Add Welcome message
+                    const welcomeSpan = document.createElement('span');
+                    welcomeSpan.textContent = `Welcome, ${data.username}`;
+                    welcomeSpan.className = 'custom-button';
+                    welcomeSpan.style.marginRight = '10px';
+                    buttonContainer.insertBefore(welcomeSpan, logoutBtn);
                 }
             }
         })
