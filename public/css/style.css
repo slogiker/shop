@@ -14,7 +14,7 @@ body {
     min-height: 100vh;
 }
 
-.main-content {
+.main-content, .content {
     flex: 1; /* Pushes footer down */
 }
 
@@ -27,10 +27,11 @@ body {
 }
 
 #logo {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
     cursor: pointer;
     padding-right: 15px;
-    width: 50px;
-    height: 50px;
 }
 
 #logo:hover {
@@ -111,9 +112,8 @@ body {
 }
 
 /* Checkout Page */
-.checkout-container {
-    max-width: 800px;
-    width: 100%;
+.basket-container {
+    max-width: 600px; /* Constrain basket width */
     margin: 30px auto;
     padding: 20px;
     background-color: #fff;
@@ -121,13 +121,13 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.checkout-container h1 {
+.basket-container h1 {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
 }
 
-.progress-bar {
+.checkout-steps {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
@@ -135,50 +135,40 @@ body {
     color: #888;
 }
 
-.progress-bar span {
+.checkout-steps .step {
     padding: 5px 10px;
     border-radius: 5px;
 }
 
-.progress-bar span.active {
+.checkout-steps .step.active {
     background-color: #007bff;
     color: white;
 }
 
-.basket-section, .form-section {
-    margin-bottom: 30px;
-    max-width: 600px; /* Constrain basket width */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.basket-section h2, .form-section h2 {
-    color: #333;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-.basket-item {
+#basket .basket-item {
     display: flex;
     justify-content: space-between;
     padding: 10px 0;
     border-bottom: 1px solid #ddd;
 }
 
-.basket-item:last-child {
+#basket .basket-item:last-child {
     border-bottom: none;
+}
+
+.form-section {
+    margin-bottom: 30px;
+}
+
+.form-section h2 {
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .form-group {
     margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: bold;
-    color: #555;
-    margin-bottom: 5px;
 }
 
 .form-group input, .form-group select, .form-group textarea {
@@ -199,24 +189,14 @@ body {
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
-.required {
-    color: red;
+.checkbox-label {
+    display: block;
+    margin-bottom: 15px;
+    color: #555;
 }
 
-.order-summary {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 5px;
-    margin-top: 20px;
-}
-
-.order-summary p {
-    font-size: 18px;
-    margin: 10px 0;
-}
-
-#total-price {
-    font-weight: bold;
+#shippingFields {
+    margin-top: 10px;
 }
 
 .confirm-button {
@@ -234,14 +214,14 @@ body {
 }
 
 @media (max-width: 600px) {
-    .checkout-container {
+    .basket-container {
         padding: 15px;
     }
-    .progress-bar {
+    .checkout-steps {
         flex-direction: column;
         align-items: center;
     }
-    .progress-bar span {
+    .checkout-steps .step {
         margin: 5px 0;
     }
 }
@@ -271,7 +251,7 @@ body {
 }
 
 .login input, .register input {
-    width: calc(100% - 20px);
+    width: 100%;
     padding: 8px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -381,7 +361,14 @@ body {
     color: white;
 }
 
-/* Welcome Section (for index.html) */
+.message {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+}
+
+/* Welcome Section */
 .welcome {
     text-align: center;
     margin: 50px auto;
@@ -401,7 +388,7 @@ body {
     font-size: 18px;
 }
 
-/* Navigation (from common.js) */
+/* Navigation */
 nav {
     display: flex;
     justify-content: space-between;
@@ -410,7 +397,7 @@ nav {
     color: white;
 }
 
-/* Footer Styling */
+/* Footer */
 footer {
     background-color: #222;
     color: white;
@@ -443,4 +430,27 @@ footer p {
 .footerLink:hover {
     color: #ff5733;
     text-decoration: underline;
+}
+
+/* Site Info */
+.site-info {
+    font-size: 16px;
+    color: #555;
+    margin: 20px 0;
+    line-height: 1.5;
+}
+
+.site-info a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.site-info a:hover {
+    text-decoration: underline;
+}
+
+/* Center naslov h1 */
+.naslov {
+    text-align: center;
 }

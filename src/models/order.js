@@ -17,6 +17,7 @@ const orderSchema = new mongoose.Schema({
     products: { type: Map, of: Number },
     totalPrice: Number,
     paymentMethod: String,
-    notes: String
+    notes: String,
+    status: { type: String, default: 'pending' }
 });
 module.exports = mongoose.model('Order', orderSchema);

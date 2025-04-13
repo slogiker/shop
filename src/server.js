@@ -1,3 +1,11 @@
+/*
+###########TODO###########
+# basket shranjuje v mongodb tud ce ni dokoncan nakup
+# basket.html ni vredu narejen
+# forum me preusmeri na login tudi če sem prijavljen (še vedno kaže logout, forum, basket gumbe)
+# če si odjavljen te index preusmeri na login.html
+# preuredi footer da bo isti ko učasih
+*/
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -20,11 +28,14 @@ mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
 
+// Routes
 app.use('/auth', require('./routes/auth'));
 app.use('/shop', require('./routes/shop'));
 app.use('/forum', require('./routes/forum'));
 
+// Check authentication status
 app.get('/check-auth', (req, res) => {
+    console.log('check-auth session:', req.session.user);
     if (req.session.user) {
         res.json({ authenticated: true, username: req.session.user.username });
     } else {
@@ -32,6 +43,7 @@ app.get('/check-auth', (req, res) => {
     }
 });
 
+// Protected routes
 app.get('/shop.html', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'shop.html'));
 });
@@ -42,6 +54,12 @@ app.get('/basket.html', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'basket.html'));
 });
 
+// Default route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
+
+// Socket.IO session middleware
 io.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next);
 });

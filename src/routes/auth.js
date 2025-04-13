@@ -4,53 +4,61 @@ const User = require('../models/user');
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
-   const { username, email, password, passwordRepeat } = req.body;
-       if (!username || !email || !password || !passwordRepeat) {
-           return res.status(400).send('All fields are required');
-       }
-       if (password !== passwordRepeat) {
-           return res.status(400).send('Passwords do not match');
-       }
-       try {
-           const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-           if (existingUser) {
-               return res.status(400).send('Username or email already exists');
-           }
-           const salt = bcrypt.genSaltSync(10);
-           const hashedPassword = bcrypt.hashSync(password, salt);
-           const newUser = new User({ username, email, password: hashedPassword });
-           await newUser.save();
-           res.redirect('/login.html');
-       } catch (error) {
-           console.error('Error during registration:', error);
-           res.status(500).send('Server error');
-       }
+    const { username, email, password, passwordRepeat } = req.body;
+    console.log('Register attempt:', { username, email });
+    if (!username || !email || !password || !passwordRepeat) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+    if (password !== passwordRepeat) {
+        return res.status(400).json({ success: false, message: 'Passwords do not match' });
+    }
+    try {
+        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        if (existingUser) {
+            return res.status(400).json({ success: false, message: 'Username or email already exists' });
+        }
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+        const newUser = new User({ username, email, password: hashedPassword });
+        await newUser.save();
+        req.session.user = { username };
+        console.log('Register success, session set:', req.session.user);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error during registration:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
 });
 
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
-        if (!username || !password) {
-            return res.status(400).send('Username and password are required');
+    console.log('Login attempt:', { username });
+    if (!username || !password) {
+        return res.status(400).json({ success: false, message: 'Username and password are required' });
+    }
+    try {
+        const user = await User.findOne({ username });
+        if (!user || !bcrypt.compareSync(password, user.password)) {
+            return res.status(400).json({ success: false, message: 'Invalid credentials' });
         }
-        try {
-            const user = await User.findOne({ username });
-            if (!user || !bcrypt.compareSync(password, user.password)) {
-                return res.status(400).send('Invalid credentials');
-            }
-            req.session.user = { username };
-            res.redirect('/shop.html');
-        } catch (error) {
-            console.error('Error during login:', error);
-            res.status(500).send('Server error');
-        }
+        req.session.user = { username };
+        console.log('Login success, session set:', req.session.user);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
 });
 
 router.post('/logout', (req, res) => {
+    console.log('Logout attempt');
     req.session.destroy((err) => {
         if (err) {
-            return res.status(500).send('Could not log out.');
+            console.error('Logout error:', err);
+            return res.status(500).json({ success: false, message: 'Could not log out' });
         }
-        res.status(200).send('Logged out');
+        console.log('Logout success');
+        res.json({ success: true });
     });
 });
 

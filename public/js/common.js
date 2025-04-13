@@ -1,26 +1,34 @@
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded fired');
+    setupNavigation();
+    setupFooter();
+});
+
 function setupNavigation() {
-    // Create navbar
     const navBar = document.createElement('div');
     navBar.style.display = 'flex';
     navBar.style.justifyContent = 'space-between';
+    navBar.style.alignItems = 'center';
     navBar.style.padding = '10px';
     navBar.style.backgroundColor = '#333';
     navBar.style.color = 'white';
 
-    // Logo
     const logo = document.createElement('img');
-    logo.src = "/images/logo.png";
-    logo.id = "logo";
-    logo.alt = "Logo";
+    logo.src = '/images/logo.png';
+    logo.id = 'logo';
+    logo.alt = 'Logo';
+    logo.style.width = '100px';
+    logo.style.height = '100px';
+    logo.style.objectFit = 'contain';
     logo.addEventListener('click', () => {
         window.location.href = '/shop.html';
     });
     navBar.appendChild(logo);
 
-    // Button container
     const buttonContainer = document.createElement('div');
+    buttonContainer.style.display = 'flex';
+    buttonContainer.style.alignItems = 'center';
 
-    // Login button
     const loginButton = document.createElement('button');
     loginButton.id = 'login-button';
     loginButton.textContent = 'Login';
@@ -29,9 +37,7 @@ function setupNavigation() {
     loginButton.addEventListener('click', () => {
         window.location.href = '/login.html';
     });
-    buttonContainer.appendChild(loginButton);
 
-    // Register button
     const registerButton = document.createElement('button');
     registerButton.id = 'register-button';
     registerButton.textContent = 'Register';
@@ -40,9 +46,7 @@ function setupNavigation() {
     registerButton.addEventListener('click', () => {
         window.location.href = '/register.html';
     });
-    buttonContainer.appendChild(registerButton);
 
-    // Basket button
     const basketButton = document.createElement('button');
     basketButton.id = 'basket-button';
     basketButton.textContent = 'Basket';
@@ -52,9 +56,7 @@ function setupNavigation() {
     basketButton.addEventListener('click', () => {
         window.location.href = '/basket.html';
     });
-    buttonContainer.appendChild(basketButton);
 
-    // Logout button
     const logoutButton = document.createElement('button');
     logoutButton.id = 'logout-button';
     logoutButton.textContent = 'Logout';
@@ -62,20 +64,23 @@ function setupNavigation() {
     logoutButton.style.marginRight = '10px';
     logoutButton.style.display = 'none';
     logoutButton.addEventListener('click', () => {
-        fetch('/auth/logout', { method: 'POST' })
+        fetch('/auth/logout', {
+            method: 'POST',
+            credentials: 'include'
+        })
             .then(response => {
                 if (response.ok) {
-                    alert('Odjavleni ste');
                     window.location.href = '/login.html';
                 } else {
-                    alert('Napaka pri odjavi');
+                    alert('Logout failed');
                 }
             })
-            .catch(error => console.error('Error logging out:', error));
+            .catch(error => {
+                console.error('Error logging out:', error);
+                alert('Error logging out');
+            });
     });
-    buttonContainer.appendChild(logoutButton);
 
-    // Forum button
     const forumButton = document.createElement('button');
     forumButton.id = 'forum-button';
     forumButton.textContent = 'Forum';
@@ -85,35 +90,16 @@ function setupNavigation() {
     forumButton.addEventListener('click', () => {
         window.location.href = '/forum.html';
     });
-    buttonContainer.appendChild(forumButton);
 
-    // Forum category placeholders
-    const categories = ['General', 'Tech', 'Gaming', 'Off-Topic'];
-    const categoryElements = [];
-    categories.forEach(category => {
-        const categorySpan = document.createElement('span');
-        categorySpan.id = `category-${category.toLowerCase()}`;
-        categorySpan.textContent = category;
-        categorySpan.className = 'custom-button';
-        categorySpan.style.marginRight = '10px';
-        categorySpan.style.cursor = 'pointer';
-        categorySpan.style.display = 'none';
-        categorySpan.addEventListener('click', () => {
-            alert(`Forum category: ${category} (coming soon)`);
-        });
-        buttonContainer.appendChild(categorySpan);
-        categoryElements.push(categorySpan);
-    });
-
+    buttonContainer.append(loginButton, registerButton, basketButton, logoutButton, forumButton);
     navBar.appendChild(buttonContainer);
     document.body.prepend(navBar);
 
-    // Wrap content in main-content
     const mainContent = document.createElement('div');
     mainContent.className = 'main-content';
     while (document.body.childNodes.length > 1) {
-        const child = document.body.childNodes[1]; // Skip navBar
-        if (child.nodeName !== 'FOOTER') { // Avoid moving footer
+        const child = document.body.childNodes[1];
+        if (child.nodeName !== 'FOOTER') {
             mainContent.appendChild(child);
         } else {
             break;
@@ -121,64 +107,71 @@ function setupNavigation() {
     }
     document.body.appendChild(mainContent);
 
-    // Authentication check
-    fetch('/auth/check-auth')
-        .then(response => response.json())
+    // Check authentication
+    const currentPath = window.location.pathname;
+    const isLoginOrRegister = currentPath.endsWith('login.html') || currentPath.endsWith('register.html');
+    
+    fetch('/check-auth', { credentials: 'include' })
+        .then(response => {
+            console.log('check-auth response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
-            console.log('Auth check result:', data);
-            const isForumPage = window.location.pathname.endsWith('forum.html');
-            const loginBtn = document.getElementById('login-button');
-            const registerBtn = document.getElementById('register-button');
-            const basketBtn = document.getElementById('basket-button');
-            const logoutBtn = document.getElementById('logout-button');
-            const forumBtn = document.getElementById('forum-button');
-
+            console.log('Auth check:', data);
             if (data.authenticated) {
-                loginBtn.style.display = 'none';
-                registerBtn.style.display = 'none';
-                basketBtn.style.display = 'inline-block';
-                if (isForumPage) {
-                    logoutBtn.style.display = 'none';
-                    forumBtn.style.display = 'none';
-                    categoryElements.forEach(span => span.style.display = 'inline-block');
-                } else {
-                    logoutBtn.style.display = 'inline-block';
-                    forumBtn.style.display = 'inline-block';
-                    categoryElements.forEach(span => span.style.display = 'none');
-
-                    // Add Welcome message
-                    const welcomeSpan = document.createElement('span');
-                    welcomeSpan.textContent = `Welcome, ${data.username}`;
-                    welcomeSpan.className = 'custom-button';
-                    welcomeSpan.style.marginRight = '10px';
-                    buttonContainer.insertBefore(welcomeSpan, logoutBtn);
+                loginButton.style.display = 'none';
+                registerButton.style.display = 'none';
+                basketButton.style.display = 'inline-block';
+                logoutButton.style.display = 'inline-block';
+                forumButton.style.display = 'inline-block';
+            } else {
+                loginButton.style.display = 'inline-block';
+                registerButton.style.display = 'inline-block';
+                basketButton.style.display = 'none';
+                logoutButton.style.display = 'none';
+                forumButton.style.display = 'none';
+                // Only redirect if not already on login or register page
+                if (!isLoginOrRegister) {
+                    console.log('Not authenticated, redirecting to login.html');
+                    window.location.href = '/login.html';
                 }
             }
         })
-        .catch(error => console.error('Error checking auth:', error));
+        .catch(error => {
+            console.error('Auth check error:', error);
+            loginButton.style.display = 'inline-block';
+            registerButton.style.display = 'inline-block';
+            basketButton.style.display = 'none';
+            logoutButton.style.display = 'none';
+            forumButton.style.display = 'none';
+            // Only redirect if not on login or register page
+            if (!isLoginOrRegister) {
+                console.log('Auth check failed, redirecting to login.html');
+                window.location.href = '/login.html';
+            }
+        });
 }
 
 function setupFooter() {
-    // Create footer
     const footer = document.createElement('footer');
     footer.style.backgroundColor = '#333';
     footer.style.color = 'white';
     footer.style.textAlign = 'center';
     footer.style.padding = '10px 0';
 
-    // Footer logo
     const footerLogo = document.createElement('img');
     footerLogo.src = '/images/logo.png';
     footerLogo.id = 'footerLogo';
     footerLogo.alt = 'Footer Logo';
     footer.appendChild(footerLogo);
 
-    // Copyright text
     const copyright = document.createElement('p');
     copyright.textContent = '© 2025 MyDrugs Online. All rights reserved.';
     footer.appendChild(copyright);
 
-    // Forum link
     const forumLink = document.createElement('p');
     forumLink.className = 'footerLink';
     forumLink.textContent = 'Forum';
@@ -189,9 +182,3 @@ function setupFooter() {
 
     document.body.appendChild(footer);
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOMContentLoaded fired');
-    setupNavigation();
-    setupFooter();
-});

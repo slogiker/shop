@@ -1,34 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="./css/style.css">
-    <script src="./js/common.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="./js/common.js" defer></script>
+    <script src="./js/register.js" defer></script>
 </head>
 <body>
-    <div class="register">
-        <h2>Register</h2>
-        <form action="/auth/register" method="POST">
-            <label for="register-username">Username:</label>
-            <input type="text" id="register-username" name="username" required>
-            <br><br>
-            <label for="register-email">Email:</label>
-            <input type="email" id="register-email" name="email" required>
-            <br><br>
-            <label for="register-password">Password:</label>
-            <input type="password" id="register-password" name="password" required>
-            <br><br>
-            <label for="register-password-repeat">Repeat Password:</label>
-            <input type="password" id="register-password-repeat" name="passwordRepeat" required>
-            <br><br>
-            <button type="submit">Register</button>
-            <button type="button" id="toggle-register-password" onclick="togglePassword('register')">Show</button>
-        </form>
+    <div class="main-content">
+        <div class="register">
+            <h2>Register</h2>
+            <form>
+                <label for="register-username">Username:</label>
+                <input type="text" id="register-username" name="username" required>
+                <label for="register-email">Email:</label>
+                <input type="email" id="register-email" name="email" required>
+                <label for="register-password">Password:</label>
+                <input type="password" id="register-password" name="password" required>
+                <label for="register-password-repeat">Repeat Password:</label>
+                <input type="password" id="register-password-repeat" name="passwordRepeat" required>
+                <button type="submit" class="custom-button">Register</button>
+                <button type="button" id="toggle-register-password" class="custom-button">Show</button>
+            </form>
+        </div>
     </div>
-    <script src="./js/register.js"></script>
 </body>
 </html>
