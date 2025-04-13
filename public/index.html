@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyDrugs Online</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./css/style.css">
     <script src="./js/common.js" defer></script>
     <script src="./js/index.js" defer></script>
 </head>
@@ -12,9 +12,12 @@
     <div class="main-content">
         <div class="welcome">
             <h1>Welcome to MyDrugs Online</h1>
-            <p>Your one-stop shop for all your needs.</p>
-            <button class="custom-button" onclick="window.location.href='shop.html'">Shop Now</button>
-            <button class="custom-button" onclick="window.location.href='forum.html'">Visit Forum</button>
+            <p class="site-info">
+                MyDrugs Online is your trusted source for purchasing MDMA. To browse and buy our products, you need to 
+                <a href="/register.html">register</a> or <a href="/login.html">login</a>.
+            </p>
+            <button class="custom-button" onclick="window.location.href='register.html'">Register Now</button>
+            <button class="custom-button" onclick="window.location.href='login.html'">Login</button>
         </div>
     </div>
 </body>

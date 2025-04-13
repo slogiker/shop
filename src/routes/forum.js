@@ -1,7 +1,21 @@
 const express = require('express');
+const { getCodesFromText, encode, decode } = require('huffman-javascript');
 const Message = require('../models/message');
 const { isAuthenticated } = require('../middleware/auth');
 const router = express.Router();
+
+function manualDecode(encodedMessage, codesObj) {
+    let decoded = '';
+    let currentCode = '';
+    for (let bit of encodedMessage) {
+        currentCode += bit;
+        if (codesObj[currentCode]) {
+            decoded += codesObj[currentCode];
+            currentCode = '';
+        }
+    }
+    return decoded;
+}
 
 router.get('/messages', isAuthenticated, async (req, res) => {
     try {
@@ -55,15 +69,15 @@ router.get('/messages', isAuthenticated, async (req, res) => {
 
 router.delete('/messages/:id', isAuthenticated, async (req, res) => {
     if (req.session.user.username !== 'admin') {
-            return res.status(403).send('Forbidden');
-        }
-        try {
-            await Message.findByIdAndDelete(req.params.id);
-            res.status(200).send('Message deleted');
-        } catch (error) {
-            console.error('Error deleting message:', error);
-            res.status(500).send('Server error');
-        }
+        return res.status(403).send('Forbidden');
+    }
+    try {
+        await Message.findByIdAndDelete(req.params.id);
+        res.status(200).send('Message deleted');
+    } catch (error) {
+        console.error('Error deleting message:', error);
+        res.status(500).send('Server error');
+    }
 });
 
 module.exports = router;

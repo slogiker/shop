@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="./css/style.css">
-    <script src="./js/common.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="./js/common.js" defer></script>
+    <script src="./js/login.js" defer></script>
 </head>
 <body>
-    <div class="login">
-        <h2>Login</h2>
-        <form action="/auth/login" method="POST">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br><br>
-            <button type="submit">Login</button>
-            <button type="button" id="toggle-login-password" onclick="togglePassword('login')">Show</button>
-        </form>
+    <div class="main-content">
+        <div class="login">
+            <h2>Login</h2>
+            <form>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit" class="custom-button">Login</button>
+                <button type="button" id="toggle-login-password" class="custom-button">Show</button>
+            </form>
+        </div>
     </div>
-    <script src="./js/login.js"></script>
 </body>
 </html>
