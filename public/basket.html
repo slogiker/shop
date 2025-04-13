@@ -3,110 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - MyDrugs Online</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <script src="./js/common.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>MyDrugs Online - Basket</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/common.js" defer></script>
+    <script src="/js/basket.js" defer></script>
 </head>
 <body>
-    <div class="checkout-container">
+    <div class="content">
         <h1>Checkout</h1>
-        <div class="progress-bar">
-            <span class="active">1. Basket</span>
-            <span>2. Details</span>
-            <span>3. Confirm</span>
+        <div class="checkout-steps">
+            <span class="step active">1. Basket</span>
+            <span class="step">2. Details</span>
+            <span class="step">3. Confirm</span>
         </div>
-        <div class="checkout-sections">
-            <!-- Basket Items -->
-            <section class="basket-section">
-                <h2>Your Basket</h2>
-                <div id="basket-items"></div>
-            </section>
-            <!-- Order Form -->
-            <section class="form-section">
-                <form id="order-form">
+        <div class="basket-container">
+            <div id="basket"></div>
+            <form id="checkoutForm" class="checkout-form" style="display: none;">
+                <div class="form-section">
+                    <h2>Your Basket</h2>
+                    <!-- Basket items will be populated dynamically -->
+                </div>
+                <div class="form-section">
                     <h2>Contact Information</h2>
                     <div class="form-group">
-                        <label for="first-name">First Name <span class="required">*</span></label>
-                        <input type="text" id="first-name" name="firstName" required>
+                        <input type="text" id="firstName" placeholder="First Name *" required>
                     </div>
                     <div class="form-group">
-                        <label for="last-name">Last Name <span class="required">*</span></label>
-                        <input type="text" id="last-name" name="lastName" required>
+                        <input type="text" id="lastName" placeholder="Last Name *" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email <span class="required">*</span></label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" placeholder="Email *" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone Number <span class="required">*</span></label>
-                        <input type="tel" id="phone" name="phone" required>
+                        <input type="tel" id="phone" placeholder="Phone Number *" required>
                     </div>
+                </div>
+                <div class="form-section">
                     <h2>Billing Address</h2>
                     <div class="form-group">
-                        <label for="billing-street">Street Address <span class="required">*</span></label>
-                        <input type="text" id="billing-street" name="billingStreet" required>
+                        <input type="text" id="billingStreet" placeholder="Street Address *" required>
                     </div>
                     <div class="form-group">
-                        <label for="billing-city">City <span class="required">*</span></label>
-                        <input type="text" id="billing-city" name="billingCity" required>
+                        <input type="text" id="billingCity" placeholder="City *" required>
                     </div>
                     <div class="form-group">
-                        <label for="billing-postal">Postal Code <span class="required">*</span></label>
-                        <input type="text" id="billing-postal" name="billingPostal" required>
+                        <input type="text" id="billingPostal" placeholder="Postal Code *" required>
                     </div>
                     <div class="form-group">
-                        <label for="billing-country">Country <span class="required">*</span></label>
-                        <input type="text" id="billing-country" name="billingCountry" required>
+                        <input type="text" id="billingCountry" placeholder="Country *" required>
                     </div>
+                </div>
+                <div class="form-section">
                     <h2>Shipping Address</h2>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="same-as-billing" checked>
-                            Same as billing address
-                        </label>
-                    </div>
-                    <div id="shipping-fields" style="display: none;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="sameAsBilling" checked> Same as billing address
+                    </label>
+                    <div id="shippingFields" style="display: none;">
                         <div class="form-group">
-                            <label for="shipping-street">Street Address <span class="required">*</span></label>
-                            <input type="text" id="shipping-street" name="shippingStreet">
+                            <input type="text" id="shippingStreet" placeholder="Street Address *" required>
                         </div>
                         <div class="form-group">
-                            <label for="shipping-city">City <span class="required">*</span></label>
-                            <input type="text" id="shipping-city" name="shippingCity">
+                            <input type="text" id="shippingCity" placeholder="City *" required>
                         </div>
                         <div class="form-group">
-                            <label for="shipping-postal">Postal Code <span class="required">*</span></label>
-                            <input type="text" id="shipping-postal" name="shippingPostal">
+                            <input type="text" id="shippingPostal" placeholder="Postal Code *" required>
                         </div>
                         <div class="form-group">
-                            <label for="shipping-country">Country <span class="required">*</span></label>
-                            <input type="text" id="shipping-country" name="shippingCountry">
+                            <input type="text" id="shippingCountry" placeholder="Country *" required>
                         </div>
                     </div>
+                </div>
+                <div class="form-section">
                     <h2>Payment Method</h2>
                     <div class="form-group">
-                        <label for="payment-method">Currency <span class="required">*</span></label>
-                        <select id="payment-method" name="paymentMethod" required>
-                            <option value="">Select Currency</option>
-                            <option value="BTC">BTC</option>
-                            <option value="ETH">ETH</option>
+                        <select id="paymentMethod" required>
+                            <option value="BTC">Bitcoin (BTC)</option>
+                            <option value="ETH">Ethereum (ETH)</option>
                         </select>
                     </div>
+                </div>
+                <div class="form-section">
                     <h2>Additional Information</h2>
                     <div class="form-group">
-                        <label for="notes">Order Notes (Optional)</label>
-                        <textarea id="notes" name="notes" rows="4"></textarea>
+                        <textarea id="notes" placeholder="Notes (optional)"></textarea>
                     </div>
-                    <div class="order-summary">
-                        <h2>Order Summary</h2>
-                        <p>Total Price: <span id="total-price">0.0000</span> <span id="currency"></span></p>
-                        <button type="submit" class="confirm-button">Place Order</button>
-                    </div>
-                </form>
-            </section>
+                </div>
+                <button type="submit" class="custom-button confirm-button">Confirm Order</button>
+            </form>
         </div>
     </div>
-    <script src="./js/basket.js"></script>
 </body>
 </html>
