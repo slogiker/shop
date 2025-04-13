@@ -1,111 +1,66 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let basket = [];
-    const basketItemsDiv = document.getElementById('basket-items');
-    const totalPriceSpan = document.getElementById('total-price');
-    const currencySpan = document.getElementById('currency');
-    const paymentMethodSelect = document.getElementById('payment-method');
-    const sameAsBillingCheckbox = document.getElementById('same-as-billing');
-    const shippingFields = document.getElementById('shipping-fields');
+    const checkoutForm = document.getElementById('checkoutForm');
+    const basketSection = checkoutForm.querySelector('.form-section:first-child'); // The "Your Basket" section
+    const sameAsBilling = document.getElementById('sameAsBilling');
+    const shippingFields = document.getElementById('shippingFields');
 
-    fetch('/shop/get-basket', { credentials: 'include' })
+    fetch('/shop/get-basket')
         .then(response => response.json())
-        .then(data => {
-            basket = data;
-            basketItemsDiv.innerHTML = '';
+        .then(basket => {
             if (basket.length === 0) {
-                basketItemsDiv.innerHTML = '<p>Your basket is empty.</p>';
-                document.getElementById('order-form').style.display = 'none';
-            } else {
-                basket.forEach(item => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'basket-item';
-                    itemDiv.innerHTML = `
-                        <span>${item.name} x ${item.quantity}</span>
-                        <span>${item.priceBTC} BTC / ${item.priceETH} ETH</span>
-                    `;
-                    basketItemsDiv.appendChild(itemDiv);
-                });
+                basketSection.innerHTML = '<h2>Your Basket</h2><p>Your basket is empty.</p>';
+                return;
             }
-            updateTotalPrice();
+            basketSection.innerHTML = '<h2>Your Basket</h2>';
+            basket.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'basket-item';
+                itemDiv.textContent = `${item.name} x${item.quantity} ${item.priceBTC} BTC / ${item.priceETH} ETH`;
+                basketSection.appendChild(itemDiv);
+            });
+            checkoutForm.style.display = 'block';
         })
-        .catch(error => {
-            console.error('Error fetching basket:', error);
-            basketItemsDiv.innerHTML = '<p>Error loading basket.</p>';
-        });
+        .catch(error => console.error('Error fetching basket:', error));
 
-    sameAsBillingCheckbox.addEventListener('change', () => {
-        shippingFields.style.display = sameAsBillingCheckbox.checked ? 'none' : 'block';
-        const inputs = shippingFields.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.required = !sameAsBillingCheckbox.checked;
-        });
+    sameAsBilling.addEventListener('change', () => {
+        shippingFields.style.display = sameAsBilling.checked ? 'none' : 'block';
+        const shippingInputs = shippingFields.querySelectorAll('input');
+        shippingInputs.forEach(input => input.required = !sameAsBilling.checked);
     });
 
-    paymentMethodSelect.addEventListener('change', updateTotalPrice);
-
-    document.getElementById('order-form').addEventListener('submit', (e) => {
+    checkoutForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const formData = {
-            firstName: document.getElementById('first-name').value.trim(),
-            lastName: document.getElementById('last-name').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            phone: document.getElementById('phone').value.trim(),
-            billingStreet: document.getElementById('billing-street').value.trim(),
-            billingCity: document.getElementById('billing-city').value.trim(),
-            billingPostal: document.getElementById('billing-postal').value.trim(),
-            billingCountry: document.getElementById('billing-country').value.trim(),
-            shippingStreet: sameAsBillingCheckbox.checked ? document.getElementById('billing-street').value.trim() : document.getElementById('shipping-street').value.trim(),
-            shippingCity: sameAsBillingCheckbox.checked ? document.getElementById('billing-city').value.trim() : document.getElementById('shipping-city').value.trim(),
-            shippingPostal: sameAsBillingCheckbox.checked ? document.getElementById('billing-postal').value.trim() : document.getElementById('shipping-postal').value.trim(),
-            shippingCountry: sameAsBillingCheckbox.checked ? document.getElementById('billing-country').value.trim() : document.getElementById('shipping-country').value.trim(),
-            paymentMethod: paymentMethodSelect.value,
-            notes: document.getElementById('notes').value.trim()
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            billingStreet: document.getElementById('billingStreet').value,
+            billingCity: document.getElementById('billingCity').value,
+            billingPostal: document.getElementById('billingPostal').value,
+            billingCountry: document.getElementById('billingCountry').value,
+            shippingStreet: sameAsBilling.checked ? document.getElementById('billingStreet').value : document.getElementById('shippingStreet').value,
+            shippingCity: sameAsBilling.checked ? document.getElementById('billingCity').value : document.getElementById('shippingCity').value,
+            shippingPostal: sameAsBilling.checked ? document.getElementById('billingPostal').value : document.getElementById('shippingPostal').value,
+            shippingCountry: sameAsBilling.checked ? document.getElementById('billingCountry').value : document.getElementById('shippingCountry').value,
+            paymentMethod: document.getElementById('paymentMethod').value,
+            notes: document.getElementById('notes').value
         };
-
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone ||
-            !formData.billingStreet || !formData.billingCity || !formData.billingPostal || !formData.billingCountry ||
-            (!sameAsBillingCheckbox.checked && (!formData.shippingStreet || !formData.shippingCity || !formData.shippingPostal || !formData.shippingCountry)) ||
-            !formData.paymentMethod) {
-            alert('Please fill in all required fields');
-            return;
-        }
-        if (basket.length === 0) {
-            alert('Your basket is empty');
-            return;
-        }
 
         fetch('/shop/confirm-order', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
             body: JSON.stringify(formData)
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Order confirmed! Thank you for your purchase.');
-                window.location.href = '/shop.html';
-            } else {
-                alert(data.message || 'Error confirming order');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error confirming order');
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Order confirmed!');
+                    window.location.href = '/shop.html';
+                } else {
+                    alert('Error confirming order: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
     });
-
-    function updateTotalPrice() {
-        const paymentMethod = paymentMethodSelect.value;
-        let total = 0;
-        if (paymentMethod && basket.length > 0) {
-            basket.forEach(item => {
-                total += item.quantity * (paymentMethod === 'BTC' ? item.priceBTC : item.priceETH);
-            });
-            currencySpan.textContent = paymentMethod;
-        } else {
-            currencySpan.textContent = '';
-        }
-        totalPriceSpan.textContent = total.toFixed(4);
-    }
 });

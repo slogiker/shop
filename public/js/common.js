@@ -108,7 +108,7 @@ function setupNavigation() {
     document.body.prepend(navBar);
 
     // Authentication check
-    fetch('/auth/check-auth')
+    fetch('/check-auth')
         .then(response => response.json())
         .then(data => {
             console.log('Auth check result:', data);
@@ -131,13 +131,6 @@ function setupNavigation() {
                     logoutBtn.style.display = 'inline-block';
                     forumBtn.style.display = 'inline-block';
                     categoryElements.forEach(span => span.style.display = 'none');
-
-                    // Add Welcome message
-                    const welcomeSpan = document.createElement('span');
-                    welcomeSpan.textContent = `Welcome, ${data.username}`;
-                    welcomeSpan.className = 'custom-button';
-                    welcomeSpan.style.marginRight = '10px';
-                    buttonContainer.insertBefore(welcomeSpan, logoutBtn);
                 }
             }
         })
