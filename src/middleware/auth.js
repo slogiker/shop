@@ -5,5 +5,5 @@ function isAuthenticated(req, res, next) {
         res.redirect('/login.html');
     }
 }
-// Force cache reload
+console.log('is authenticated in auth.js', isAuthenticated);
 module.exports = { isAuthenticated };
