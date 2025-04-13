@@ -1,21 +1,21 @@
+/* Reset defaults */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 /* Basic Styling */
 body {
     font-family: 'Comic Sans MS', sans-serif;
-    margin: 0;
-    padding: 0;
     background-color: lightgray;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-#content {
-    flex: 1;
-}
-
-/* Container Styling */
-.container {
-    margin: 30px;
+.main-content {
+    flex: 1; /* Pushes footer down */
 }
 
 /* Item Styling */
@@ -23,7 +23,7 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    margin: 10px;
+    margin: 30px;
 }
 
 #logo {
@@ -33,20 +33,19 @@ body {
     height: 50px;
 }
 
+#logo:hover {
+    filter: drop-shadow(0 10px 20px #ffffffcb);
+}
+
 #footerLogo {
     width: 40px;
     height: 40px;
     margin-right: 15px;
     vertical-align: middle;
-    transition: filter 0.3s ease;
 }
 
 #footerLogo:hover {
     filter: drop-shadow(0 5px 10px #ffffffcb);
-}
-
-#logo:hover {
-    filter: drop-shadow(0 10px 20px #ffffffcb);
 }
 
 .item {
@@ -79,53 +78,47 @@ body {
 }
 
 .quantity-container {
-    display: flex; /* Align input and button horizontally */
-    align-items: center; /* Center them vertically */
-    justify-content: center; /* Center them horizontally */
-    gap: 5px; /* Add some space between the input and button */
-    margin: 0 auto; /* Center the container itself */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin: 0 auto;
 }
 
 .quantity {
-    width: 60px; /* Keep the input field size */
+    width: 60px;
     padding: 5px;
-    margin: 0; /* Remove extra margin */
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 .add-to-basket {
-    background-color: #28a745; /* Green background color */
-    border: none; /* Remove border */
-    padding: 0; /* Remove extra padding */
-    cursor: pointer; /* Pointer cursor */
-    display: flex; /* Align icon properly */
-    align-items: center; /* Center icon vertically */
-    justify-content: center; /* Center icon horizontally */
-    border-radius: 5px; /* Rounded corners */
-    height: 30px; /* Adjust height to match input */
-    width: 30px; /* Make the button square */
+    background-color: #28a745;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    height: 30px;
+    width: 30px;
 }
 
 .add-to-basket i {
-    font-size: 16px; /* Keep the icon size consistent */
-    color: white; /* White icon color */
-}
-
-/* Basket Button */
-.basket-button {
-    padding: 10px;
     font-size: 16px;
+    color: white;
 }
 
 /* Checkout Page */
 .checkout-container {
     max-width: 800px;
+    width: 100%;
     margin: 30px auto;
     padding: 20px;
-    background-color: #f9f9f9; /* Changed to a lighter background for consistency */
+    background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Slightly softer shadow */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .checkout-container h1 {
@@ -154,14 +147,9 @@ body {
 
 .basket-section, .form-section {
     margin-bottom: 30px;
-}
-
-.form-section {
-    margin-bottom: 30px;
-    background-color: white; /* Add white background for card effect */
-    padding: 20px; /* Increase padding */
-    border-radius: 8px; /* Slightly smaller radius for a modern look */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    max-width: 600px; /* Constrain basket width */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .basket-section h2, .form-section h2 {
@@ -193,25 +181,19 @@ body {
     margin-bottom: 5px;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.form-group input, .form-group select, .form-group textarea {
     width: 100%;
-    max-width: 400px; /* Limit input width */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-    box-sizing: border-box; /* Ensure padding is included in width */
 }
 
 .form-group textarea {
     resize: vertical;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
     border-color: #007bff;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
@@ -238,14 +220,13 @@ body {
 }
 
 .confirm-button {
-    width: auto; /* Change from 100% to auto to fit content */
-    padding: 12px 30px; /* Slightly larger padding */
+    width: 100%;
+    padding: 15px;
     background-color: #28a745;
     color: white;
     font-size: 18px;
     border-radius: 5px;
     cursor: pointer;
-    align-self: center; /* Center the button */
 }
 
 .confirm-button:hover {
@@ -265,31 +246,8 @@ body {
     }
 }
 
-/* Section Styling */
-section {
-    margin: 20px 0;
-}
-
-/* Additional styling for buttons */
-button {
-    background-color: #333;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #ff5733;
-}
-
-.naslov {
-    text-align: center;
-    padding: 10px;
-    margin: 20px auto;
-}
-
-.login {
+/* Login and Register */
+.login, .register {
     width: 300px;
     margin: 50px auto;
     padding: 20px;
@@ -299,12 +257,12 @@ button:hover {
     text-align: center;
 }
 
-.login h2 {
+.login h2, .register h2 {
     margin-bottom: 20px;
     color: #333;
 }
 
-.login label {
+.login label, .register label {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
@@ -312,7 +270,7 @@ button:hover {
     text-align: left;
 }
 
-.login input {
+.login input, .register input {
     width: calc(100% - 20px);
     padding: 8px;
     margin-bottom: 15px;
@@ -320,7 +278,7 @@ button:hover {
     border-radius: 5px;
 }
 
-.login button {
+.login button, .register button {
     padding: 10px 15px;
     border: none;
     background-color: #28a745;
@@ -331,7 +289,7 @@ button:hover {
     margin-right: 5px;
 }
 
-.login button:hover {
+.login button:hover, .register button:hover {
     background-color: #218838;
 }
 
@@ -343,83 +301,12 @@ button:hover {
     background-color: #0056b3;
 }
 
-.register {
-    width: 300px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.register h2 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.register label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #555;
-    text-align: left;
-}
-
-.register input {
-    width: calc(100% - 20px);
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.register button {
-    padding: 10px 15px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.register button:hover {
-    background-color: #0056b3;
-}
-
 #toggle-register-password {
     background-color: #28a745;
 }
 
 #toggle-register-password:hover {
     background-color: #218838;
-}
-
-.text {
-    text-align: center;
-    color: red;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.text:hover {
-    text-decoration: underline;
-}
-
-.footerLink {
-    cursor: pointer;
-    color: white;
-    margin: 0 10px;
-    display: inline-block;
-    transition: color 0.3s ease;
-}
-
-.footerLink:hover {
-    color: #ff5733;
-    text-decoration: underline;
 }
 
 /* General Button Styling */
@@ -429,7 +316,6 @@ button:hover {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     background-color: #007bff;
     color: white;
     font-weight: bold;
@@ -439,51 +325,11 @@ button:hover {
 .custom-button:hover {
     background-color: #0056b3;
     transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
 
 .custom-button:active {
     background-color: #004085;
     transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.custom-button:focus {
-    outline: 2px solid #0056b3;
-    outline-offset: 2px;
-}
-
-.fa {
-    padding: 20px;
-    font-size: 30px;
-    width: 50px;
-    text-align: center;
-    text-decoration: none;
-    margin: 5px 2px;
-}
-
-.fa:hover {
-    opacity: 0.7;
-}
-
-.fa-google {
-    background: #dd4b39;
-    color: white;
-}
-
-.fa-facebook {
-    background: #3B5998;
-    color: white;
-}
-
-.fa-twitter {
-    background: #55ACEE;
-    color: white;
-}
-
-.fa-instagram {
-    background: #125688;
-    color: white;
 }
 
 /* Forum Container */
@@ -496,7 +342,6 @@ button:hover {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Chat Box */
 #chatBox {
     height: 400px;
     overflow-y: auto;
@@ -507,7 +352,6 @@ button:hover {
     margin-bottom: 15px;
 }
 
-/* Input Area */
 .forum-input {
     display: flex;
     gap: 10px;
@@ -520,16 +364,13 @@ button:hover {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-    transition: border-color 0.3s ease;
 }
 
 #messageInput:focus {
     border-color: #007bff;
-    outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
-/* Send Button */
 .forum-send-btn {
     padding: 10px 20px;
     font-size: 16px;
@@ -538,54 +379,9 @@ button:hover {
     cursor: pointer;
     background-color: #28a745;
     color: white;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.forum-send-btn:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-}
-
-.forum-send-btn:active {
-    background-color: #1e7e34;
-    transform: translateY(0);
-}
-
-.message {
-    position: relative;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-    background-color: #f1f1f1;
-}
-
-.admin-message {
-    background-color: #ffcccb;
-    border-left: 5px solid #ff6347;
-}
-
-.delete-btn {
-    display: none;
-    position: absolute;
-    right: 10px;
-    top: 5px;
-    cursor: pointer;
-    color: red;
-    font-weight: bold;
-}
-
-.message:hover .delete-btn {
-    display: inline;
-}
-
-.timestamp {
-    font-size: 0.8em;
-    color: #888;
-    margin-left: 10px;
-}
-
-/* Welcome Section */
+/* Welcome Section (for index.html) */
 .welcome {
     text-align: center;
     margin: 50px auto;
@@ -605,19 +401,13 @@ button:hover {
     font-size: 18px;
 }
 
-.welcome button {
-    padding: 10px 20px;
-    margin: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #007bff;
+/* Navigation (from common.js) */
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #333;
     color: white;
-}
-
-.welcome button:hover {
-    background-color: #0056b3;
 }
 
 /* Footer Styling */
@@ -643,37 +433,14 @@ footer p {
     font-size: 14px;
 }
 
-.checkout-steps {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 20px 0;
-}
-
-.checkout-steps .step {
-    padding: 10px 20px;
-    background-color: #e0e0e0;
-    border-radius: 20px;
-    font-weight: bold;
-    color: #666;
-}
-
-.checkout-steps .step.active {
-    background-color: #28a745; /* Match your green color */
+.footerLink {
+    cursor: pointer;
     color: white;
+    margin: 0 10px;
+    transition: color 0.3s ease;
 }
 
-.checkout-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Space between sections */
-}
-
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    font-size: 1em;
-    color: #666;
+.footerLink:hover {
+    color: #ff5733;
+    text-decoration: underline;
 }
