@@ -1,0 +1,36 @@
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center h-100">
+        <div class="col-md-8 col-lg-8 col-xl-8">
+            <div class="glass-card" style="border-radius: 15px;">
+                <div class="card-header d-flex justify-content-between align-items-center p-3 text-white border-bottom-0"
+                    style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                    <h5 class="mb-0"><i class="fas fa-comments mr-2"></i>Community Chat</h5>
+                </div>
+
+                <div class="card-body" id="chat-container" style="height: 400px; overflow-y: auto;">
+                    <div *ngFor="let msg of messages" class="d-flex flex-row mb-4"
+                        [ngClass]="{'justify-content-end': msg.username === username, 'justify-content-start': msg.username !== username}">
+                        <div class="p-3 chat-bubble"
+                            [ngClass]="{'bg-premium text-white': msg.username === username, 'bg-light text-dark': msg.username !== username}"
+                            style="border-radius: 15px;">
+                            <p class="small mb-0 font-weight-bold" *ngIf="msg.username !== username">{{ msg.username }}
+                            </p>
+                            <p class="mb-0">{{ msg.message }}</p>
+                            <span class="small opacity-50">{{ msg.timestamp | date:'shortTime' }}</span>
+                        </div>
+                    </div>
+                    <div *ngIf="messages.length === 0" class="text-center text-muted mt-5">
+                        <p>No messages yet. Start the conversation!</p>
+                    </div>
+                </div>
+
+                <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+                    <input type="text" class="form-control bg-transparent text-white border-secondary"
+                        placeholder="Type message..." [(ngModel)]="message" (keyup.enter)="sendMessage()">
+                    <button class="btn btn-premium ml-2" (click)="sendMessage()"><i
+                            class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

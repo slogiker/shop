@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg navbar-dark m-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" routerLink="/">
+            <i class="fas fa-pills mr-2"></i>MyDrugs
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <i class="fas fa-home mr-1"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/forum" routerLinkActive="active">
+                        <i class="fas fa-comments mr-1"></i> Forum
+                    </a>
+                </li>
+                <!-- Shop & Basket only for logged in -->
+                <ng-container *ngIf="isLoggedIn">
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/shop" routerLinkActive="active">
+                            <i class="fas fa-store mr-1"></i> Shop
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/basket" routerLinkActive="active">
+                            <i class="fas fa-shopping-cart mr-1"></i> Basket
+                        </a>
+                    </li>
+                </ng-container>
+            </ul>
+
+            <div class="d-flex align-items-center">
+                <!-- Guest: Login/Register -->
+                <ng-container *ngIf="!isLoggedIn">
+                    <app-button [config]="loginButton"></app-button>
+                    <app-button [config]="registerButton"></app-button>
+                </ng-container>
+
+                <!-- Logged In: Welcome + Logout -->
+                <ng-container *ngIf="isLoggedIn">
+                    <span class="text-white mr-3"><i class="fas fa-user mr-1"></i> {{ username }}</span>
+                    <app-button [config]="logoutButton"></app-button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</nav>

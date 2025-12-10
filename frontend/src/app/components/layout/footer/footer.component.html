@@ -1,0 +1,45 @@
+<footer class="mt-auto pt-5 pb-3 glass-card m-3 text-white">
+    <div class="container">
+        <div class="row">
+            <!-- Brand & About -->
+            <div class="col-lg-4 mb-4">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="/images/footerLogo.png" alt="Logo" style="height: 50px;" class="mr-3">
+                    <h4 class="font-weight-bold mb-0">MyDrugs Online</h4>
+                </div>
+                <p class="text-muted">
+                    Your premium destination for exclusive products. Join our community and explore the best deals in
+                    town.
+                </p>
+                <app-social-icons [icons]="socialIcons"></app-social-icons>
+            </div>
+
+            <!-- Links Columns -->
+            <div class="col-lg-2 offset-lg-2 col-md-4 mb-4">
+                <app-footer-links title="Navigation" [links]="quickLinks"></app-footer-links>
+            </div>
+
+            <div class="col-lg-2 col-md-4 mb-4">
+                <app-footer-links title="Support" [links]="supportLinks"></app-footer-links>
+            </div>
+
+            <!-- Newsletter (Optional UI enhancement) -->
+            <div class="col-lg-2 col-md-4 mb-4">
+                <h5 class="text-primary mb-3">Stay Updated</h5>
+                <div class="input-group">
+                    <input type="email" class="form-control bg-transparent border-secondary text-white"
+                        placeholder="Email">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="border-secondary my-4">
+
+        <div class="text-center text-muted small">
+            <p class="mb-0">&copy; 2025 MyDrugs Online. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
