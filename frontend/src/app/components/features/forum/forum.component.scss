@@ -1,0 +1,22 @@
+.bg-premium {
+    background: var(--accent-blue);
+}
+
+.chat-bubble {
+    max-width: 70%;
+    min-width: 100px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.bg-light {
+    background: var(--bg-secondary) !important;
+}
+
+/* Scrollbar needed inside chat */
+#chat-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+#chat-container::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+}

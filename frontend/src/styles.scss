@@ -1,0 +1,153 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* MDMA / Club Theme - Deep purples and pinks */
+  --bg-primary: #0d0a12;
+  --bg-secondary: #150f1c;
+  --bg-card: #1a1225;
+  --border-color: #2d2438;
+  --text-primary: #e8e0f0;
+  --text-secondary: #a89bb8;
+  --accent-primary: #a855f7;
+  /* Purple */
+  --accent-secondary: #ec4899;
+  /* Pink */
+  --accent-success: #22c55e;
+  --accent-warning: #f59e0b;
+
+  --font-main: 'Inter', -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3d3048;
+}
+
+/* Card Styling */
+.glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Buttons */
+.btn-premium {
+  background: var(--accent-primary);
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-premium:hover {
+  background: #9333ea;
+  transform: translateY(-1px);
+  color: white;
+}
+
+.btn-outline-premium {
+  background: transparent;
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary);
+  padding: 8px 22px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-outline-premium:hover {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.btn-danger {
+  background: var(--accent-secondary);
+}
+
+/* Bootstrap Overrides */
+.container {
+  max-width: 1200px;
+}
+
+a {
+  text-decoration: none;
+  transition: color 0.2s;
+  color: var(--accent-primary);
+}
+
+a:hover {
+  text-decoration: none;
+  color: var(--accent-secondary);
+}
+
+/* Form Controls */
+.form-control {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.form-control:focus {
+  background: var(--bg-secondary);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  box-shadow: 0 0 0 0.2rem rgba(168, 85, 247, 0.25);
+}
+
+/* Badges */
+.badge-warning {
+  background: var(--accent-warning);
+  color: white;
+}
+
+.badge-info {
+  background: var(--accent-primary);
+  color: white;
+}
+
+/* Navbar Dark Theme */
+.navbar-dark .navbar-nav .nav-link {
+  color: var(--text-secondary);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+  color: var(--text-primary);
+}
+
+/* Alerts */
+.alert-danger {
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid var(--accent-secondary);
+  color: #f472b6;
+}
+
+/* Text utilities */
+.text-primary {
+  color: var(--accent-primary) !important;
+}

@@ -1,0 +1,37 @@
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 font-weight-bold text-white">Exclusive Collection</h1>
+        <p class="lead text-muted">Browse our premium selection available in BTC and ETH.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-5" *ngFor="let product of products">
+            <div class="glass-card h-100 p-4 product-card d-flex flex-column">
+                <div class="img-container mb-4 text-center">
+                    <img [src]="product.image" [alt]="product.name" class="img-fluid product-img">
+                </div>
+
+                <h3 class="h4 font-weight-bold text-white mb-2">{{ product.name }}</h3>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge badge-warning p-2">
+                        <i class="fab fa-bitcoin mr-1"></i>{{ product.priceBTC }}
+                    </span>
+                    <span class="badge badge-info p-2">
+                        <i class="fab fa-ethereum mr-1"></i>{{ product.priceETH }}
+                    </span>
+                </div>
+
+                <div class="mt-auto d-flex align-items-center">
+                    <input type="number" [(ngModel)]="quantities[product.name]" min="1"
+                        class="form-control bg-transparent text-white border-secondary mr-2" style="width: 70px;">
+                    <button class="btn btn-premium flex-grow-1" (click)="addToBasket(product)"
+                        [disabled]="loading[product.name]">
+                        <span *ngIf="loading[product.name]"><i class="fas fa-spinner fa-spin"></i></span>
+                        <span *ngIf="!loading[product.name]"><i class="fas fa-cart-plus mr-2"></i> Add</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
