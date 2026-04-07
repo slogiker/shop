@@ -2,11 +2,29 @@
   "name": "shop-desktop",
   "version": "1.0.0",
   "description": "Shop desktop app (Electron wrapper)",
+  "author": {
+    "name": "slogiker",
+    "email": "shop@localhost"
+  },
+  "homepage": "https://github.com/slogiker/shop",
   "main": "main.js",
   "scripts": {
     "dev": "NODE_ENV=development electron .",
     "start": "electron .",
     "pack": "electron-builder --linux"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "huffman": "^0.1.0",
+    "huffman-javascript": "^0.1.2",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.13.2",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "electron": "^41.1.1",
@@ -16,24 +34,31 @@
     "appId": "com.shop.desktop",
     "productName": "Shop",
     "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ],
+      "target": ["AppImage", "deb"],
       "category": "Network",
       "icon": "../frontend/public/images/logo.png"
     },
     "files": [
       "main.js",
-      "../backend/src/**/*",
-      "../backend/package.json",
-      "../backend/.env",
-      "../frontend/dist/frontend/browser/**/*"
+      "node_modules/**/*",
+      {
+        "from": "../backend/src",
+        "to": "backend/src"
+      },
+      {
+        "from": "../backend",
+        "to": "backend",
+        "filter": [".env", "package.json"]
+      },
+      {
+        "from": "../frontend/dist/frontend/browser",
+        "to": "frontend"
+      }
     ],
     "extraResources": [
       {
-        "from": "../backend/node_modules",
-        "to": "backend/node_modules"
+        "from": "../frontend/public/images/logo.png",
+        "to": "logo.png"
       }
     ]
   }

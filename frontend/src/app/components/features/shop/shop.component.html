@@ -6,12 +6,17 @@
 
     <div class="row">
         <div class="col-md-4 mb-5" *ngFor="let product of products">
-            <div class="glass-card h-100 p-4 product-card d-flex flex-column">
+            <div class="glass-card h-100 p-4 product-card d-flex flex-column" (click)="openModal(product)" style="cursor: pointer;">
                 <div class="img-container mb-4 text-center">
                     <img [src]="product.image" [alt]="product.name" class="img-fluid product-img">
                 </div>
 
                 <h3 class="h4 font-weight-bold text-white mb-2">{{ product.name }}</h3>
+
+                <div class="mb-2">
+                    <i *ngFor="let s of stars(avgRating(product))" [class]="s" class="star-sm"></i>
+                    <small class="text-muted ml-1">{{ avgRating(product).toFixed(1) }}/5 ({{ product.reviews?.length }})</small>
+                </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <span class="badge badge-warning p-2">
@@ -22,15 +27,76 @@
                     </span>
                 </div>
 
-                <div class="mt-auto d-flex align-items-center">
-                    <input type="number" [(ngModel)]="quantities[product.name]" min="1"
-                        class="form-control bg-transparent text-white border-secondary mr-2" style="width: 70px;">
-                    <button class="btn btn-premium flex-grow-1" (click)="addToBasket(product)"
-                        [disabled]="loading[product.name]">
-                        <span *ngIf="loading[product.name]"><i class="fas fa-spinner fa-spin"></i></span>
-                        <span *ngIf="!loading[product.name]"><i class="fas fa-cart-plus mr-2"></i> Add</span>
+                <div class="mt-auto">
+                    <button class="btn btn-premium btn-block" (click)="openModal(product); $event.stopPropagation()">
+                        <i class="fas fa-eye mr-2"></i> View Details
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Detail Modal -->
+<div class="modal-backdrop" *ngIf="selectedProduct" (click)="closeModal()">
+    <div class="modal-card glass-card p-4 p-md-5" (click)="$event.stopPropagation()">
+        <button class="modal-close-btn" (click)="closeModal()">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="row align-items-center">
+            <div class="col-md-5 text-center mb-4 mb-md-0">
+                <img [src]="selectedProduct.image" [alt]="selectedProduct.name" class="img-fluid modal-img">
+            </div>
+            <div class="col-md-7">
+                <h2 class="font-weight-bold text-white mb-2">{{ selectedProduct.name }}</h2>
+
+                <div class="mb-3">
+                    <i *ngFor="let s of stars(avgRating(selectedProduct))" [class]="s" class="star-md"></i>
+                    <small class="text-muted ml-2">{{ avgRating(selectedProduct).toFixed(1) }}/5 · {{ selectedProduct.reviews?.length }} reviews</small>
+                </div>
+
+                <div class="d-flex mb-4" style="gap: 0.75rem;">
+                    <span class="badge badge-warning p-2">
+                        <i class="fab fa-bitcoin mr-1"></i>{{ selectedProduct.priceBTC }} BTC
+                    </span>
+                    <span class="badge badge-info p-2">
+                        <i class="fab fa-ethereum mr-1"></i>{{ selectedProduct.priceETH }} ETH
+                    </span>
+                </div>
+
+                <p class="text-secondary mb-4" style="line-height: 1.7;">{{ selectedProduct.description }}</p>
+
+                <div class="d-flex align-items-center" style="gap: 0.75rem;">
+                    <div class="qty-controls d-flex align-items-center">
+                        <button class="qty-btn" (click)="modalQuantity = modalQuantity > 1 ? modalQuantity - 1 : 1">−</button>
+                        <span class="qty-value">{{ modalQuantity }}</span>
+                        <button class="qty-btn" (click)="modalQuantity = modalQuantity + 1">+</button>
+                    </div>
+                    <button class="btn btn-premium flex-grow-1"
+                        (click)="addToBasket(selectedProduct, modalQuantity)"
+                        [disabled]="loading[selectedProduct.name]">
+                        <span *ngIf="loading[selectedProduct.name]"><i class="fas fa-spinner fa-spin"></i></span>
+                        <span *ngIf="!loading[selectedProduct.name]"><i class="fas fa-cart-plus mr-2"></i> Add to Basket</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="mt-4 pt-4 reviews-section" *ngIf="selectedProduct.reviews?.length">
+            <h6 class="text-muted text-uppercase mb-3" style="font-size: 0.75rem; letter-spacing: 0.06em">Customer Reviews</h6>
+            <div *ngFor="let review of selectedProduct.reviews" class="review-card mb-3 p-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="font-weight-bold text-white" style="font-size: 0.9rem;">
+                        <i class="fas fa-user-circle mr-1" style="color: var(--accent-primary)"></i>{{ review.username }}
+                    </span>
+                    <div>
+                        <i *ngFor="let s of stars(review.rating)" [class]="s" class="star-sm"></i>
+                        <small class="text-muted ml-1">{{ review.rating }}/5</small>
+                    </div>
+                </div>
+                <p class="text-secondary mb-0" style="font-size: 0.88rem; line-height: 1.5">"{{ review.comment }}"</p>
             </div>
         </div>
     </div>

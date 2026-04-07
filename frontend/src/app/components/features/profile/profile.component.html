@@ -1,0 +1,115 @@
+<div class="container py-5">
+  <div class="row">
+
+    <!-- Left: Account Settings -->
+    <div class="col-lg-4 mb-4">
+      <div class="glass-card p-4">
+        <div class="text-center mb-4">
+          <i class="fas fa-user-circle" style="font-size: 3.5rem; color: var(--accent-primary)"></i>
+          <h5 class="mt-2 mb-0">{{ username }}</h5>
+          <small class="text-muted">Account Settings</small>
+        </div>
+
+        <hr class="border-secondary">
+
+        <!-- Change Username -->
+        <h6 class="text-muted text-uppercase mb-3" style="font-size: 0.75rem; letter-spacing: 0.05em">Change Username</h6>
+        <form [formGroup]="usernameForm" (ngSubmit)="changeUsername()">
+          <div class="form-group">
+            <input type="text" formControlName="newUsername" class="form-control bg-transparent text-white border-secondary rounded-pill px-3"
+              placeholder="New username">
+          </div>
+          <div *ngIf="usernameMessage" class="alert alert-success py-2 small">{{ usernameMessage }}</div>
+          <div *ngIf="usernameError" class="alert alert-danger py-2 small">{{ usernameError }}</div>
+          <button type="submit" [disabled]="usernameForm.invalid" class="btn btn-premium btn-block btn-sm">Update Username</button>
+        </form>
+
+        <hr class="border-secondary mt-4">
+
+        <!-- Change Password -->
+        <h6 class="text-muted text-uppercase mb-3" style="font-size: 0.75rem; letter-spacing: 0.05em">Change Password</h6>
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+          <div class="form-group">
+            <div class="input-group">
+              <input [type]="showCurrentPassword ? 'text' : 'password'" formControlName="currentPassword"
+                class="form-control bg-transparent text-white border-secondary"
+                style="border-radius: 50px 0 0 50px; padding-left: 1rem;" placeholder="Current password">
+              <div class="input-group-append">
+                <button type="button" class="btn btn-outline-secondary border-secondary"
+                  style="border-radius: 0 50px 50px 0; background: transparent;"
+                  (click)="showCurrentPassword = !showCurrentPassword">
+                  <i class="fas" [class.fa-eye]="!showCurrentPassword" [class.fa-eye-slash]="showCurrentPassword" style="color: var(--text-secondary)"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <input [type]="showNewPassword ? 'text' : 'password'" formControlName="newPassword"
+                class="form-control bg-transparent text-white border-secondary"
+                style="border-radius: 50px 0 0 50px; padding-left: 1rem;" placeholder="New password (min 6 chars)">
+              <div class="input-group-append">
+                <button type="button" class="btn btn-outline-secondary border-secondary"
+                  style="border-radius: 0 50px 50px 0; background: transparent;"
+                  (click)="showNewPassword = !showNewPassword">
+                  <i class="fas" [class.fa-eye]="!showNewPassword" [class.fa-eye-slash]="showNewPassword" style="color: var(--text-secondary)"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="passwordMessage" class="alert alert-success py-2 small">{{ passwordMessage }}</div>
+          <div *ngIf="passwordError" class="alert alert-danger py-2 small">{{ passwordError }}</div>
+          <button type="submit" [disabled]="passwordForm.invalid" class="btn btn-premium btn-block btn-sm">Update Password</button>
+        </form>
+
+        <hr class="border-secondary mt-4">
+
+        <!-- Delete Account -->
+        <h6 class="text-muted text-uppercase mb-3" style="font-size: 0.75rem; letter-spacing: 0.05em; color: var(--accent-secondary) !important">Danger Zone</h6>
+        <div *ngIf="!confirmDelete">
+          <button class="btn btn-block btn-sm" style="border: 1px solid var(--accent-secondary); color: var(--accent-secondary); background: transparent; border-radius: 6px;"
+            (click)="confirmDelete = true">
+            <i class="fas fa-trash mr-1"></i> Delete Account
+          </button>
+        </div>
+        <div *ngIf="confirmDelete">
+          <p class="small text-danger mb-2">This will permanently delete your account and all orders. Are you sure?</p>
+          <div *ngIf="deleteError" class="alert alert-danger py-2 small">{{ deleteError }}</div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-danger flex-grow-1" style="border-radius: 6px;" (click)="deleteAccount()">Yes, Delete</button>
+            <button class="btn btn-sm btn-outline-secondary flex-grow-1" style="border-radius: 6px;" (click)="confirmDelete = false">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Orders -->
+    <div class="col-lg-8">
+      <div class="glass-card p-4">
+        <h5 class="mb-4"><i class="fas fa-box mr-2" style="color: var(--accent-primary)"></i>Past Orders</h5>
+
+        <div *ngIf="ordersLoading" class="text-center text-muted py-4">
+          <i class="fas fa-spinner fa-spin mr-2"></i> Loading orders...
+        </div>
+
+        <div *ngIf="!ordersLoading && orders.length === 0" class="text-center text-muted py-4">
+          <i class="fas fa-box-open" style="font-size: 2rem; opacity: 0.3"></i>
+          <p class="mt-2">No orders yet.</p>
+        </div>
+
+        <div *ngFor="let order of orders" class="mb-3 p-3" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px;">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <span class="badge" style="background: var(--accent-primary); color: white; font-size: 0.7rem;">CONFIRMED</span>
+              <small class="text-muted ml-2">{{ order.timestamp | date:'dd MMM yyyy, HH:mm' }}</small>
+            </div>
+            <span class="font-weight-bold" style="color: var(--accent-primary)">{{ order.totalPrice | number:'1.4-4' }} BTC</span>
+          </div>
+          <p class="mb-1 small text-white">{{ getOrderItems(order.products) }}</p>
+          <small class="text-muted">{{ order.firstName }} {{ order.lastName }} · {{ order.billingCity }}, {{ order.billingCountry }}</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -98,4 +98,52 @@ router.post('/confirm-order', isAuthenticated, async (req, res) => {
     }
 });
 
+// Update quantity of an item in basket (quantity=0 removes it)
+router.post('/update-quantity', isAuthenticated, async (req, res) => {
+    try {
+        const { name, quantity, priceBTC } = req.body;
+        if (!name || quantity === undefined || !priceBTC) {
+            return res.status(400).json({ success: false, message: 'Invalid data' });
+        }
+        const username = req.session.user.username;
+        const order = await Order.findOne({ user: username, status: 'pending' });
+        if (!order) return res.status(404).json({ success: false, message: 'No basket found' });
+
+        const oldQty = order.products.get(name) || 0;
+        const newQty = parseInt(quantity, 10);
+
+        if (newQty <= 0) {
+            order.products.delete(name);
+        } else {
+            order.products.set(name, newQty);
+        }
+        order.totalPrice = Math.max(0, order.totalPrice + (newQty - oldQty) * parseFloat(priceBTC));
+        await order.save();
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error updating quantity:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+// Remove item from basket
+router.post('/remove-from-basket', isAuthenticated, async (req, res) => {
+    try {
+        const { name, priceBTC } = req.body;
+        if (!name || !priceBTC) return res.status(400).json({ success: false, message: 'Invalid data' });
+        const username = req.session.user.username;
+        const order = await Order.findOne({ user: username, status: 'pending' });
+        if (!order) return res.status(404).json({ success: false, message: 'No basket found' });
+
+        const qty = order.products.get(name) || 0;
+        order.products.delete(name);
+        order.totalPrice = Math.max(0, order.totalPrice - qty * parseFloat(priceBTC));
+        await order.save();
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error removing from basket:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
 module.exports = router;

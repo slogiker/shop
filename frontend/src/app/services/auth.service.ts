@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = '/auth'; // Proxy in angular.json will handle this or we set absolute path if needed
+  private apiUrl = `${environment.apiUrl}/auth`;
 
   private currenUserSubject = new BehaviorSubject<any>(null);
   public currentUser$ = this.currenUserSubject.asObservable();
@@ -20,7 +21,7 @@ export class AuthService {
   }
 
   checkAuthStatus() {
-    this.http.get<{ authenticated: boolean, username: string }>('/check-auth')
+    this.http.get<{ authenticated: boolean, username: string }>(`${environment.apiUrl}/check-auth`)
       .subscribe({
         next: (res) => {
           if (res.authenticated) {
@@ -38,7 +39,7 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap(res => {
         if (res.success) {
-          this.checkAuthStatus();
+          this.setUser(credentials.username);
         }
       })
     );
@@ -48,6 +49,27 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/register`, data);
   }
 
+  setUser(username: string) {
+    this.currenUserSubject.next({ username });
+    this.isLoggedInSubject.next(true);
+  }
+
+  getOrders(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/orders`);
+  }
+
+  changeUsername(newUsername: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/change-username`, { newUsername });
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/change-password`, { currentPassword, newPassword });
+  }
+
+  deleteAccount(): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/delete-account`);
+  }
+
   logout() {
     this.http.post(`${this.apiUrl}/logout`, {}).subscribe(() => {
       this.logoutClientSide();
@@ -55,7 +77,7 @@ export class AuthService {
     });
   }
 
-  private logoutClientSide() {
+  logoutClientSide() {
     this.currenUserSubject.next(null);
     this.isLoggedInSubject.next(false);
   }

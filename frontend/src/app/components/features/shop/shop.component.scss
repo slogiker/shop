@@ -7,7 +7,7 @@
 .product-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    border-color: var(--accent-blue);
+    border-color: var(--accent-primary);
 }
 
 .img-container {
@@ -29,9 +29,95 @@
     transform: scale(1.05);
 }
 
-/* Remove Arrows from Number Input */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+/* Modal */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: fadeIn 0.15s ease;
+}
+
+.modal-card {
+    width: 100%;
+    max-width: 780px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: scaleIn 0.2s ease;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.modal-close-btn:hover { color: var(--text-primary); }
+
+.modal-img {
+    max-height: 240px;
+    filter: drop-shadow(0 4px 16px rgba(168, 85, 247, 0.3));
+}
+
+/* Quantity controls */
+.qty-controls {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.qty-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    padding: 0.4rem 0.85rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.qty-btn:hover { background: var(--border-color); }
+
+.qty-value {
+    padding: 0 0.75rem;
+    font-weight: 600;
+    min-width: 2rem;
+    text-align: center;
+}
+
+/* Stars */
+.star-sm { font-size: 0.7rem; color: #f59e0b; }
+.star-md { font-size: 0.9rem; color: #f59e0b; }
+
+/* Reviews */
+.reviews-section {
+    border-top: 1px solid var(--border-color);
+}
+
+.review-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
 }

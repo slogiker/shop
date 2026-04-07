@@ -10,17 +10,22 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: 'http://localhost:4200',
-        credentials: true
-    }
-});
-
-app.use(cors({
-    origin: 'http://localhost:4200',
+// Allow requests from the Angular dev server and Electron (file:// → null origin)
+const allowedOrigins = ['http://localhost:4200', 'http://localhost:3000'];
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
-}));
+};
+
+const io = new Server(server, { cors: corsOptions });
+
+app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

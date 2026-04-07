@@ -15,6 +15,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   error: string = '';
   loading = false;
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,

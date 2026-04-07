@@ -15,6 +15,8 @@ export class RegisterComponent {
   registerForm: FormGroup;
   error: string = '';
   loading = false;
+  showPassword = false;
+  showPasswordRepeat = false;
 
   constructor(
     private fb: FormBuilder,
@@ -48,7 +50,8 @@ export class RegisterComponent {
 
       this.authService.register(this.registerForm.value).subscribe({
         next: (res) => {
-          this.router.navigate(['/login']);
+          this.authService.setUser(this.registerForm.get('username')!.value);
+          this.router.navigate(['/shop']);
         },
         error: (err) => {
           this.error = err.error?.message || 'Registration failed';

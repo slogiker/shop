@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product } from '../../../models/product';
+import { Product, Review } from '../../../models/product';
 import { ShopService } from '../../../services/shop.service';
+import { ToastService } from '../../../services/toast.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -16,7 +17,10 @@ export class ShopComponent implements OnInit {
   quantities: { [key: string]: number } = {};
   loading: { [key: string]: boolean } = {};
 
-  constructor(private shopService: ShopService) { }
+  selectedProduct: Product | null = null;
+  modalQuantity = 1;
+
+  constructor(private shopService: ShopService, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.shopService.getProducts().subscribe(data => {
@@ -25,19 +29,35 @@ export class ShopComponent implements OnInit {
     });
   }
 
-  addToBasket(product: Product) {
-    const qty = this.quantities[product.name] || 1;
-    this.loading[product.name] = true;
+  openModal(product: Product) {
+    this.selectedProduct = product;
+    this.modalQuantity = 1;
+  }
 
+  closeModal() {
+    this.selectedProduct = null;
+  }
+
+  stars(rating: number): string[] {
+    return Array(5).fill('').map((_, i) => i < rating ? 'fas fa-star' : 'far fa-star');
+  }
+
+  avgRating(product: Product): number {
+    if (!product.reviews?.length) return 0;
+    return product.reviews.reduce((s, r) => s + r.rating, 0) / product.reviews.length;
+  }
+
+  addToBasket(product: Product, qty: number) {
+    this.loading[product.name] = true;
     this.shopService.addToBasket(product, qty).subscribe({
-      next: (res) => {
-        alert(`${product.name} (x${qty}) added to basket!`);
+      next: () => {
+        this.toast.success(`${product.name} (x${qty}) added to basket!`);
         this.loading[product.name] = false;
-        this.quantities[product.name] = 1; // Reset qty
+        this.quantities[product.name] = 1;
+        this.closeModal();
       },
-      error: (err) => {
-        console.error(err);
-        alert('Failed to add to basket. Please login first.');
+      error: () => {
+        this.toast.error('Failed to add to basket.');
         this.loading[product.name] = false;
       }
     });
