@@ -1,0 +1,40 @@
+{
+  "name": "shop-desktop",
+  "version": "1.0.0",
+  "description": "Shop desktop app (Electron wrapper)",
+  "main": "main.js",
+  "scripts": {
+    "dev": "NODE_ENV=development electron .",
+    "start": "electron .",
+    "pack": "electron-builder --linux"
+  },
+  "devDependencies": {
+    "electron": "^41.1.1",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "com.shop.desktop",
+    "productName": "Shop",
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Network",
+      "icon": "../frontend/public/images/logo.png"
+    },
+    "files": [
+      "main.js",
+      "../backend/src/**/*",
+      "../backend/package.json",
+      "../backend/.env",
+      "../frontend/dist/frontend/browser/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../backend/node_modules",
+        "to": "backend/node_modules"
+      }
+    ]
+  }
+}
