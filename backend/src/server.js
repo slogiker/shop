@@ -42,13 +42,20 @@ app.use('/forum', require('./routes/forum'));
 
 // API: Check authentication status
 app.get('/check-auth', (req, res) => {
-    // console.log('check-auth session start:', req.session);
     if (req.session.user) {
         res.json({ authenticated: true, username: req.session.user.username });
     } else {
         res.json({ authenticated: false });
     }
 });
+
+// Serve built Angular frontend (Electron app mode only)
+if (process.env.FRONTEND_DIST) {
+    app.use(express.static(process.env.FRONTEND_DIST));
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(process.env.FRONTEND_DIST, 'index.html'));
+    });
+}
 
 // Socket.IO session middleware
 io.use((socket, next) => {

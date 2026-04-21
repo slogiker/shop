@@ -68,6 +68,7 @@ export class BasketComponent implements OnInit {
   calculateTotals() {
     this.totalBTC = this.basketItems.reduce((sum, i) => sum + i.priceBTC * i.quantity, 0);
     this.totalETH = this.basketItems.reduce((sum, i) => sum + i.priceETH * i.quantity, 0);
+    this.shopService.basketCount$.next(this.basketItems.reduce((sum, i) => sum + i.quantity, 0));
   }
 
   changeQuantity(item: any, delta: number) {
@@ -106,6 +107,7 @@ export class BasketComponent implements OnInit {
           this.success = true;
           this.submitting = false;
           this.basketItems = [];
+          this.shopService.basketCount$.next(0);
           this.toast.success('Order confirmed!');
         },
         error: (err) => {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Product } from '../models/product';
 import { environment } from '../../environments/environment';
 
@@ -94,6 +95,8 @@ export class ShopService {
     }
   ];
 
+  basketCount$ = new BehaviorSubject<number>(0);
+
   constructor(private http: HttpClient) { }
 
   getProducts(): Observable<Product[]> {
@@ -104,13 +107,20 @@ export class ShopService {
     return this.products.find(p => p.name === name);
   }
 
+  refreshBasketCount(): void {
+    this.getBasket().subscribe({
+      next: items => this.basketCount$.next(items.reduce((s, i) => s + i.quantity, 0)),
+      error: () => {}
+    });
+  }
+
   addToBasket(product: Product, quantity: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/add-to-basket`, {
       name: product.name,
       quantity,
       priceBTC: product.priceBTC,
       priceETH: product.priceETH
-    });
+    }).pipe(tap(() => this.basketCount$.next(this.basketCount$.value + quantity)));
   }
 
   getBasket(): Observable<any[]> {

@@ -29,8 +29,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" routerLink="/basket" routerLinkActive="active">
+                        <a class="nav-link" routerLink="/basket" routerLinkActive="active" style="position: relative; padding-right: 0.5rem;">
                             <i class="fas fa-shopping-cart mr-1"></i> Basket
+                            <span *ngIf="basketCount > 0" class="basket-badge">{{ basketCount }}</span>
                         </a>
                     </li>
                 </ng-container>

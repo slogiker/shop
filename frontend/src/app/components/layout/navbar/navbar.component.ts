@@ -4,6 +4,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { Button } from '../../../models/button';
 import { AuthService } from '../../../services/auth.service';
+import { ShopService } from '../../../services/shop.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,6 +16,7 @@ import { AuthService } from '../../../services/auth.service';
 export class NavbarComponent implements OnInit {
   isLoggedIn = false;
   username = '';
+  basketCount = 0;
 
   loginButton: Button = {
     label: 'Login',
@@ -35,14 +37,17 @@ export class NavbarComponent implements OnInit {
     action: () => this.authService.logout()
   };
 
-  constructor(private router: Router, public authService: AuthService) { }
+  constructor(private router: Router, public authService: AuthService, private shopService: ShopService) { }
 
   ngOnInit(): void {
     this.authService.isLoggedIn$.subscribe(loggedIn => {
       this.isLoggedIn = loggedIn;
+      if (loggedIn) this.shopService.refreshBasketCount();
+      else this.shopService.basketCount$.next(0);
     });
     this.authService.currentUser$.subscribe(user => {
       if (user) this.username = user.username;
     });
+    this.shopService.basketCount$.subscribe(count => this.basketCount = count);
   }
 }

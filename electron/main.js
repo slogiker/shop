@@ -18,18 +18,18 @@ function waitForBackend(retries, delay, callback) {
 
 function startBackend() {
   if (app.isPackaged) {
-    // Packaged AppImage/deb: no node binary available, require() directly.
-    // Electron's main process IS Node.js, so this works.
-    // Backend deps are bundled in app.asar/node_modules (via electron/package.json dependencies).
+    // Packaged AppImage/deb: require() directly — Electron main process IS Node.js.
     const serverPath = path.join(app.getAppPath(), 'backend', 'src', 'server.js');
+    process.env.FRONTEND_DIST = path.join(app.getAppPath(), 'frontend');
     require(serverPath);
   } else {
-    // Unpackaged prod (start.sh prod): spawn node normally
+    // Unpackaged prod: spawn node normally
     const { spawn } = require('child_process');
     const backendPath = path.join(__dirname, '..', 'backend', 'src', 'server.js');
+    const frontendDist = path.join(__dirname, '..', 'frontend', 'dist', 'frontend', 'browser');
     backendProcess = spawn('node', [backendPath], {
       cwd: path.join(__dirname, '..', 'backend'),
-      env: { ...process.env },
+      env: { ...process.env, FRONTEND_DIST: frontendDist },
       stdio: 'inherit'
     });
     backendProcess.on('error', (err) => {
@@ -61,16 +61,9 @@ function createWindow() {
 
   if (isDev) {
     mainWindow.loadURL('http://localhost:4200');
-  } else if (app.isPackaged) {
-    // Packaged: frontend bundled at app.asar/frontend/ (built with baseHref ./)
-    const indexPath = path.join(app.getAppPath(), 'frontend', 'index.html');
-    mainWindow.loadFile(indexPath);
   } else {
-    // Unpackaged prod (start.sh prod): load from local dist
-    const indexPath = path.join(
-      __dirname, '..', 'frontend', 'dist', 'frontend', 'browser', 'index.html'
-    );
-    mainWindow.loadFile(indexPath);
+    // Both packaged and unpackaged prod: backend serves the frontend at localhost:3000
+    mainWindow.loadURL('http://localhost:3000');
   }
 
   mainWindow.on('closed', () => {

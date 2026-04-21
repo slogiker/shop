@@ -2,8 +2,7 @@ function isAuthenticated(req, res, next) {
     if (req.session.user) {
         next();
     } else {
-        res.redirect('/login.html');
+        res.status(401).json({ success: false, message: 'Unauthorized' });
     }
 }
-console.log('is authenticated in auth.js', isAuthenticated);
 module.exports = { isAuthenticated };
